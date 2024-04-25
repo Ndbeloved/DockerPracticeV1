@@ -1,0 +1,30 @@
+
+
+services:
+  #mongodb service
+  mongo_db:
+    container_name: db_container
+    image: mongo:latest
+    restart: always
+    ports:
+      - 2717:27017
+    volumes:
+      - mongo_db:/data/db
+
+  
+  #Node Api service
+  api:
+    build: .
+    ports:
+      - 4000:3000
+    environment:
+      DEPLOYMENT_ENV: test
+      MONGO_URL_TEST: mongodb://db_container/dockerv1
+      MONGO_URL_PROD: mongodb+srv://BelovedErastus:08037459206Be@cluster0.rzgqzse.mongodb.net/dockerv1
+      PORT: 3000
+
+    depends_on:
+      - mongo_db
+
+volumes:
+  mongo_db: {}
